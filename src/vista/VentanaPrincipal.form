@@ -9,12 +9,15 @@
             <Property name="text" type="java.lang.String" value="Funcionalidades"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
+            <MenuItem class="javax.swing.JMenuItem" name="ItemCrearXML">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Crear XML de Pel&#xed;culas"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ItemCrearXMLActionPerformed"/>
+              </Events>
             </MenuItem>
-            <Menu class="javax.swing.JMenu" name="jMenu2">
+            <Menu class="javax.swing.JMenu" name="ItemLeerXML">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Leer XMLy Mostrar Trailer"/>
               </Properties>

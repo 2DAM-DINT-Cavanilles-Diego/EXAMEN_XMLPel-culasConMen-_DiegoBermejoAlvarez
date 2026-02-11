@@ -36,12 +36,12 @@
                       </Group>
                       <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="txtFieldTrailer" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jTextFieldTitulo" alignment="0" max="32767" attributes="0"/>
+                          <Component id="txtURL" alignment="0" max="32767" attributes="0"/>
+                          <Component id="txtTitulo" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jComboBoxGenero" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txtFieldDuracion" min="-2" pref="81" max="-2" attributes="0"/>
+                                  <Component id="comboGenero" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtDuracion" min="-2" pref="81" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
@@ -67,22 +67,22 @@
               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jComboBoxGenero" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="comboGenero" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jTextFieldTitulo" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtTitulo" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtFieldDuracion" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtDuracion" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtFieldTrailer" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtURL" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="btnAgregarPelicula" min="-2" max="-2" attributes="0"/>
@@ -116,7 +116,7 @@
         <Property name="text" type="java.lang.String" value="Tr&#xe1;iler (URL):"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JComboBox" name="jComboBoxGenero">
+    <Component class="javax.swing.JComboBox" name="comboGenero">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="4">
@@ -131,14 +131,17 @@
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JTextField" name="jTextFieldTitulo">
+    <Component class="javax.swing.JTextField" name="txtTitulo">
     </Component>
     <Component class="javax.swing.JButton" name="btnAgregarPelicula">
       <Properties>
         <Property name="text" type="java.lang.String" value="Agregar Pel&#xed;cula"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAgregarPeliculaActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="txtFieldTrailer">
+    <Component class="javax.swing.JTextField" name="txtURL">
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
       <AuxValues>
@@ -159,8 +162,11 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Generar XML"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGenerarXMLActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="txtFieldDuracion">
+    <Component class="javax.swing.JTextField" name="txtDuracion">
     </Component>
   </SubComponents>
 </Form>

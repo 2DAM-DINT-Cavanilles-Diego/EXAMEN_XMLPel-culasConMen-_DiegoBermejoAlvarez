@@ -9,7 +9,7 @@ package vista;
  * @author dieberalv
  */
 public class VentanaPrincipal extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VentanaPrincipal.class.getName());
 
     /**
@@ -30,18 +30,23 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        ItemCrearXML = new javax.swing.JMenuItem();
+        ItemLeerXML = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jMenu1.setText("Funcionalidades");
 
-        jMenuItem1.setText("Crear XML de Películas");
-        jMenu1.add(jMenuItem1);
+        ItemCrearXML.setText("Crear XML de Películas");
+        ItemCrearXML.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ItemCrearXMLActionPerformed(evt);
+            }
+        });
+        jMenu1.add(ItemCrearXML);
 
-        jMenu2.setText("Leer XMLy Mostrar Trailer");
-        jMenu1.add(jMenu2);
+        ItemLeerXML.setText("Leer XMLy Mostrar Trailer");
+        jMenu1.add(ItemLeerXML);
 
         jMenuBar1.add(jMenu1);
 
@@ -60,6 +65,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void ItemCrearXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemCrearXMLActionPerformed
+
+        // Creamos la instancia del diálogo
+        Crear_XML_Peliculas ventanaCrear = new Crear_XML_Peliculas(this, true);
+        // La hacemos visible
+        ventanaCrear.setVisible(true);
+    }//GEN-LAST:event_ItemCrearXMLActionPerformed
 
     /**
      * @param args the command line arguments
@@ -87,9 +100,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem ItemCrearXML;
+    private javax.swing.JMenu ItemLeerXML;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     // End of variables declaration//GEN-END:variables
 }

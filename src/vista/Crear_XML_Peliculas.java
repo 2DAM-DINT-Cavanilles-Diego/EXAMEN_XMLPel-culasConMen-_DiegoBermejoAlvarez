@@ -4,20 +4,42 @@
  */
 package vista;
 
+import java.util.List;
+import java.util.ArrayList;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.DOMImplementation;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import modelo.Pelicula;
+
 /**
  *
  * @author dieberalv
  */
 public class Crear_XML_Peliculas extends javax.swing.JDialog {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Crear_XML_Peliculas.class.getName());
 
-    /**
-     * Creates new form Crear_XML_Peliculas
-     */
+    // Lista para guardar las 9 películas antes de crear el archivo 
+    private List<Pelicula> listaPeliculas = new ArrayList<>();
+
+    // Creación de contadores para cumplir el límite de 3 películas por género 
+    private int contadorMisterio = 0;
+    private int contadorAventura = 0;
+    private int contadorComedia = 0;
+
     public Crear_XML_Peliculas(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        btnGenerarXML.setEnabled(false);
     }
 
     /**
@@ -33,14 +55,14 @@ public class Crear_XML_Peliculas extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jComboBoxGenero = new javax.swing.JComboBox<>();
-        jTextFieldTitulo = new javax.swing.JTextField();
+        comboGenero = new javax.swing.JComboBox<>();
+        txtTitulo = new javax.swing.JTextField();
         btnAgregarPelicula = new javax.swing.JButton();
-        txtFieldTrailer = new javax.swing.JTextField();
+        txtURL = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         btnGenerarXML = new javax.swing.JButton();
-        txtFieldDuracion = new javax.swing.JTextField();
+        txtDuracion = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -52,15 +74,25 @@ public class Crear_XML_Peliculas extends javax.swing.JDialog {
 
         jLabel4.setText("Tráiler (URL):");
 
-        jComboBoxGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "...", "Misterio", "Aventura", "Comedia" }));
+        comboGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "...", "Misterio", "Aventura", "Comedia" }));
 
         btnAgregarPelicula.setText("Agregar Película");
+        btnAgregarPelicula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarPeliculaActionPerformed(evt);
+            }
+        });
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
         btnGenerarXML.setText("Generar XML");
+        btnGenerarXML.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerarXMLActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -78,12 +110,12 @@ public class Crear_XML_Peliculas extends javax.swing.JDialog {
                             .addComponent(jLabel4))
                         .addGap(25, 25, 25)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtFieldTrailer)
-                            .addComponent(jTextFieldTitulo)
+                            .addComponent(txtURL)
+                            .addComponent(txtTitulo)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jComboBoxGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtFieldDuracion, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(comboGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtDuracion, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -100,19 +132,19 @@ public class Crear_XML_Peliculas extends javax.swing.JDialog {
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jComboBoxGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(comboGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextFieldTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(txtFieldDuracion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtDuracion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(txtFieldTrailer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtURL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(btnAgregarPelicula)
                 .addGap(18, 18, 18)
@@ -125,9 +157,155 @@ public class Crear_XML_Peliculas extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
+    private void btnAgregarPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarPeliculaActionPerformed
+        try {
+            // Obtener datos de la interfaz 
+            String genero = (String) comboGenero.getSelectedItem();
+            String titulo = txtTitulo.getText().trim();
+            String duracionStr = txtDuracion.getText().trim();
+            String url = txtURL.getText().trim();
+
+            // Comprobar que el campo de título no está vacío 
+            if (titulo.isEmpty()) {
+                throw new Exception("El campo de título no puede estar vacío.");
+
+            }
+
+            // Comprobar que en el campo de duración se ha introducido un número positivo
+            int duracion;
+            try {
+                duracion = Integer.parseInt(duracionStr);
+                if (duracion <= 0) {
+                    throw new NumberFormatException();
+                }
+
+            } catch (NumberFormatException e) {
+                throw new Exception("La duración debe ser un número entero positivo (sin letras ni decimales).");
+
+            }
+
+            // Comprobar el formato de URL introducido
+            if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                throw new Exception("Formato de URL introducido no válido. Debe comenzar por http:// o https://.");
+
+            }
+
+            // Establecer un límite de 3 películas por género 
+            if (genero.equals("Misterio") && contadorMisterio >= 3) {
+                throw new Exception("Ya hay 3 películas de Misterio.");
+            }
+
+            if (genero.equals("Aventura") && contadorAventura >= 3) {
+                throw new Exception("Ya hay 3 películas de Aventura.");
+            }
+
+            if (genero.equals("Comedia") && contadorComedia >= 3) {
+                throw new Exception("Ya hay 3 películas de Comedia.");
+            }
+
+            // Si todo es correcto, crear objeto y añadir a la lista
+            Pelicula p = new Pelicula(titulo, duracion, url, genero);
+            listaPeliculas.add(p);
+
+            // Actualizar contadores y área de visualización 
+            actualizarDatos(p, genero);
+
+            // Condición para activar el botón de Generar XML 
+            if (contadorMisterio == 3 && contadorAventura == 3 && contadorComedia == 3) {
+                btnGenerarXML.setEnabled(true);
+
+            }
+
+            // Al final del "try", limpiar los elementos para que vuelvan a quedar vacíos
+            txtTitulo.setText("");
+            txtDuracion.setText("");
+            txtURL.setText("");
+
+        } catch (Exception e) {
+
+            // Mensaje de error 
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+
+        }
+
+    }//GEN-LAST:event_btnAgregarPeliculaActionPerformed
+
+    private void btnGenerarXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarXMLActionPerformed
+
+        try {
+            // Crear el documento XML en memoria
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            DOMImplementation implementation = builder.getDOMImplementation();
+            Document documento = implementation.createDocument(null, "peliculas", null);
+            documento.setXmlVersion("1.0");
+
+            // Crear los nodos principales de género
+            Element misterio = documento.createElement("misterio");
+            Element aventura = documento.createElement("aventura");
+            Element comedia = documento.createElement("comedia");
+
+            // Clasificar y añadir las películas de la lista al XML
+            for (Pelicula p : listaPeliculas) {
+                // Crear el nodo película
+                Element nodoPelicula = documento.createElement("pelicula");
+
+                Element titulo = documento.createElement("titulo");
+                titulo.setTextContent(p.getTitulo());
+                nodoPelicula.appendChild(titulo);
+
+                Element duracion = documento.createElement("duracion");
+                duracion.setTextContent(String.valueOf(p.getDuracion()));
+                nodoPelicula.appendChild(duracion);
+
+                Element trailer = documento.createElement("trailer");
+                trailer.setTextContent(p.getTrailer());
+                nodoPelicula.appendChild(trailer);
+
+                // Añadir al género correspondiente
+                if (p.getGenero().equals("Misterio")) {
+                    misterio.appendChild(nodoPelicula);
+                } else if (p.getGenero().equals("Aventura")) {
+                    aventura.appendChild(nodoPelicula);
+                } else if (p.getGenero().equals("Comedia")) {
+                    comedia.appendChild(nodoPelicula);
+                }
+            }
+
+            // Unir géneros a la raíz
+            documento.getDocumentElement().appendChild(misterio);
+            documento.getDocumentElement().appendChild(aventura);
+            documento.getDocumentElement().appendChild(comedia);
+
+            // Guardar el archivo en el directorio del proyecto
+            Source source = new DOMSource(documento);
+            Result result = new StreamResult(new java.io.File("peliculas.xml"));
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+
+            // Para que el XML sea legible
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.transform(source, result);
+
+            javax.swing.JOptionPane.showMessageDialog(this, "Archivo peliculas.xml generado con éxito.");
+
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error al generar el XML: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnGenerarXMLActionPerformed
+
+    private void actualizarDatos(Pelicula p, String genero) {
+        if (genero.equals("Misterio")) {
+            contadorMisterio++;
+        } else if (genero.equals("Aventura")) {
+            contadorAventura++;
+        } else if (genero.equals("Comedia")) {
+            contadorComedia++;
+        }
+
+        // Mostramos en el área de texto lo que vamos añadiendo [cite: 46]
+        jTextArea1.append("Añadida: [" + genero + "] " + p.getTitulo() + "\n");
+    }
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -165,15 +343,15 @@ public class Crear_XML_Peliculas extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarPelicula;
     private javax.swing.JButton btnGenerarXML;
-    private javax.swing.JComboBox<String> jComboBoxGenero;
+    private javax.swing.JComboBox<String> comboGenero;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextFieldTitulo;
-    private javax.swing.JTextField txtFieldDuracion;
-    private javax.swing.JTextField txtFieldTrailer;
+    private javax.swing.JTextField txtDuracion;
+    private javax.swing.JTextField txtTitulo;
+    private javax.swing.JTextField txtURL;
     // End of variables declaration//GEN-END:variables
 }
